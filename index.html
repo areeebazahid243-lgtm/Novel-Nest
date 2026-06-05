@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Novel Nest</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+scroll-behavior:smooth;
+font-family:'Segoe UI',sans-serif;
+}
+
+:root{
+--burgundy:#5B2333;
+--cream:#F7F2EA;
+--gold:#D4AF37;
+--white:#ffffff;
+}
+
+body{
+background:var(--cream);
+color:#333;
+line-height:1.6;
+}
+body.dark-mode{
+background:#1c1c1c;
+color:white;
+}
+
+body.dark-mode .card{
+background:#2a2a2a;
+color:white;
+}
+
+body.dark-mode .review-card{
+background:#2a2a2a;
+color:white;
+}
+
+body.dark-mode .summary-content{
+background:#2a2a2a;
+color:white;
+}
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select{
+background:#333;
+color:white;
+}
+
+.navbar{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+background:var(--burgundy);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 8%;
+z-index:1000;
+box-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+
+.logo-text{
+color:white;
+font-size:28px;
+font-weight:bold;
+}
+
+.nav-links{
+display:flex;
+list-style:none;
+gap:25px;
+}
+
+.nav-links a{
+text-decoration:none;
+color:white;
+font-weight:500;
+transition:.3s;
+}
+
+.nav-links a:hover{
+color:var(--gold);
+}
+
+.hero{
+height:100vh;
+background:
+linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+url('https://i.ibb.co/JRS6DRhc/85608385-avengers.jpg');
+background-size:cover;
+background-position:center;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+color:white;
+padding:20px;
+}
+
+.hero-content{
+max-width:900px;
+}
+
+.site-logo{
+width:180px;
+height:180px;
+object-fit:contain;
+background:white;
+padding:12px;
+border-radius:50%;
+margin-bottom:25px;
+}
+
+.hero h1{
+font-size:80px;
+margin-bottom:10px;
+}
+
+.hero p{
+font-size:24px;
+margin-bottom:25px;
+}
+
+.btn{
+display:inline-block;
+padding:14px 28px;
+background:var(--gold);
+color:black;
+text-decoration:none;
+border-radius:30px;
+font-weight:bold;
+}
+
+section{
+padding:90px 10%;
+}
+
+.section-title{
+text-align:center;
+font-size:42px;
+color:var(--burgundy);
+margin-bottom:50px;
+}
+
+.search-box{
+text-align:center;
+margin-bottom:40px;
+}
+
+.search-box input{
+width:80%;
+max-width:600px;
+padding:15px;
+border:2px solid var(--gold);
+border-radius:30px;
+font-size:16px;
+}
+
+.book-grid,
+.genre-grid,
+.review-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+}
+
+.card{
+background:white;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 4px 15px rgba(0,0,0,.12);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+}
+
+.card img{
+width:100%;
+height:320px;
+object-fit:cover;
+}
+
+.card-content{
+padding:20px;
+text-align:center;
+}
+
+.rating{
+color:#ffb400;
+font-size:20px;
+}
+
+.genre-card img{
+height:250px;
+}
+
+.video-section{
+text-align:center;
+background:white;
+}
+
+.video-frame{
+width:90%;
+max-width:900px;
+height:auto;
+border-radius:15px;
+box-shadow:0 5px 20px rgba(0,0,0,.2);
+}
+
+.summary-btn{
+width:100%;
+padding:15px;
+background:var(--burgundy);
+color:white;
+border:none;
+cursor:pointer;
+font-size:17px;
+}
+
+.summary-content{
+display:none;
+padding:20px;
+background:white;
+border:1px solid #ddd;
+}
+
+.review-card{
+background:white;
+padding:25px;
+border-radius:15px;
+}
+
+.contact-form{
+max-width:700px;
+margin:auto;
+}
+
+.contact-form input,
+.contact-form textarea,
+.contact-form select{
+width:100%;
+padding:15px;
+margin:10px 0;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+.contact-form button{
+width:100%;
+padding:15px;
+background:var(--burgundy);
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+footer{
+background:var(--burgundy);
+color:white;
+text-align:center;
+padding:30px;
+}
+
+@media(max-width:768px){
+
+.hero h1{
+font-size:48px;
+}
+
+.hero p{
+font-size:18px;
+}
+
+.navbar{
+flex-direction:column;
+gap:10px;
+}
+
+.nav-links{
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.site-logo{
+width:120px;
+height:120px;
+}
+
+.video-frame{
+height:250px;
+}
+
+}
+
+.popup-overlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.75);
+justify-content:center;
+align-items:center;
+z-index:9999;
+animation:fadeIn .4s ease;
+}
+
+.popup-box{
+background:var(--cream);
+padding:35px;
+max-width:500px;
+width:90%;
+text-align:center;
+border-radius:20px;
+border:4px solid var(--gold);
+box-shadow:0 0 25px rgba(0,0,0,.3);
+animation:popUp .5s ease;
+}
+
+.popup-box h2{
+color:var(--burgundy);
+margin-bottom:15px;
+}
+
+.popup-box p{
+margin-bottom:20px;
+font-size:17px;
+}
+
+.popup-box button{
+background:var(--burgundy);
+color:white;
+border:none;
+padding:12px 25px;
+border-radius:30px;
+cursor:pointer;
+font-size:16px;
+}
+
+@keyframes fadeIn{
+from{opacity:0;}
+to{opacity:1;}
+}
+
+@keyframes popUp{
+from{
+transform:scale(.7);
+opacity:0;
+}
+to{
+transform:scale(1);
+opacity:1;
+}
+}
+</style>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+<div class="logo-text">
+Novel Nest
+</div>
+
+<ul class="nav-links">
+
+<li><a href="#home">Home</a></li>
+<li><a href="#genres">Genres</a></li>
+<li><a href="#summaries">Summaries</a></li>
+<li><a href="#reviews">Reviews</a></li>
+
+</ul>
+<button id="darkModeBtn" class="btn">
+🌙 Dark Mode
+</button>
+
+</nav>
+
+<section id="home" class="hero">
+
+<div class="hero-content">
+
+<img
+src="https://i.ibb.co/czhfwVB/Gemini-Generated-Image-uhuya5uhuya5uhuy.png"
+class="site-logo"
+alt="Novel Nest Logo">
+
+<h1>NOVEL NEST</h1>
+
+<p>
+Discover, Explore and Review Your Next Favorite Book
+</p>
+
+<a href="#featured" class="btn">
+Explore Books
+</a>
+
+</div>
+
+</section> 
+<section id="featured">
+
+<h2 class="section-title">
+Featured Books
+</h2>
+
+<div class="search-box">
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search books..."
+onkeyup="searchBooks()">
+
+</div>
+
+<div class="book-grid">
+
+<div class="card searchable-book">
+
+<img src="https://i.ibb.co/k64r4mWh/Philosoper-s-Stone-New-UK-Cover.webp"
+alt="Harry Potter">
+
+<div class="card-content">
+
+<h3>Harry Potter and the Philosopher's Stone</h3>
+
+<p>By J.K. Rowling</p>
+
+<div class="rating">★★★★★</div>
+
+</div>
+
+</div>
+
+<div class="card searchable-book">
+
+<img src="https://i.ibb.co/GYCxr2Z/images-10.jpg"
+alt="The Alchemist">
+
+<div class="card-content">
+
+<h3>The Alchemist</h3>
+
+<p>By Paulo Coelho</p>
+
+<div class="rating">★★★★★</div>
+
+</div>
+
+</div>
+
+<div class="card searchable-book">
+
+<img src="https://i.ibb.co/YFwC1WN0/71-Cv-WDPc-VEL-AC-UF1000-1000-QL80.jpg"
+alt="Pride and Prejudice">
+
+<div class="card-content">
+
+<h3>Pride and Prejudice</h3>
+
+<p>By Jane Austen</p>
+
+<div class="rating">★★★★★</div>
+
+</div>
+
+</div>
+
+<div class="card searchable-book">
+
+<img src="https://i.ibb.co/h1nhFBS6/images-11.jpg"
+alt="The Silent Patient">
+
+<div class="card-content">
+
+<h3>The Silent Patient</h3>
+
+<p>By Alex Michaelides</p>
+
+<div class="rating">★★★★★</div>
+
+</div>
+
+</div>
+
+<div class="card searchable-book">
+
+<img src="https://i.ibb.co/JwXWQNpT/images-9.jpg"
+alt="The Hobbit">
+
+<div class="card-content">
+
+<h3>The Hobbit</h3>
+
+<p>By J.R.R. Tolkien</p>
+
+<div class="rating">★★★★★</div>
+
+</div>
+
+</div>
+
+<div class="card searchable-book">
+
+<img src="https://i.ibb.co/Vpwr41zh/9781667206264.webp"
+alt="Sherlock Holmes">
+
+<div class="card-content">
+
+<h3>The Adventures of Sherlock Holmes</h3>
+
+<p>By Arthur Conan Doyle</p>
+
+<div class="rating">★★★★★</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="video-section">
+
+<h2 class="section-title">
+Welcome to Novel Nest
+</h2>
+
+<p style="text-align:center;margin-bottom:30px;">
+Feature Book Trailer
+</p>
+<div style="max-width:900px; margin:auto;">
+
+<div class="sp-embed-player"
+data-id="cO1eQZnuQhM"
+data-aspect-ratio="1.777778"
+data-padding-top="56.250000%"
+style="position:relative;width:100%;padding-top:56.25%;height:0;">
+
+<script src="https://go.screenpal.com/player/appearance/cO1eQZnuQhM"></script>
+
+<iframe
+style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:15px;"
+scrolling="no"
+src="https://go.screenpal.com/player/cO1eQZnuQhM?ff=1&ahc=1&dcc=1&tl=1&bg=transparent&share=1&download=1&embed=1&cl=1"
+allowfullscreen="true">
+</iframe>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="genres">
+
+<h2 class="section-title">
+Popular Genres
+</h2>
+
+<div class="genre-grid">
+
+<div class="card genre-card">
+
+<img src="https://i.ibb.co/cSj8XR7z/Gemini-Generated-Image-p635ayp635ayp635.png"
+alt="Romance">
+
+<div class="card-content">
+
+<h3>Romance</h3>
+
+<p>
+Love stories, emotional journeys and unforgettable relationships.
+</p>
+
+</div>
+
+</div>
+
+<div class="card genre-card">
+
+<img src="https://i.ibb.co/sx2Q0tr/Gemini-Generated-Image-1z4uwa1z4uwa1z4u.png"
+alt="Horror">
+
+<div class="card-content">
+
+<h3>Horror</h3>
+
+<p>
+Dark tales, supernatural mysteries and spine-chilling adventures.
+</p>
+
+</div>
+
+</div>
+
+<div class="card genre-card">
+
+<img src="https://i.ibb.co/TBz55kCp/Gemini-Generated-Image-wlg9qhwlg9qhwlg9.png"
+alt="Thriller">
+
+<div class="card-content">
+
+<h3>Thriller</h3>
+
+<p>
+Suspenseful stories packed with twists and tension.
+</p>
+
+</div>
+
+</div>
+
+<div class="card genre-card">
+
+<img src="https://i.ibb.co/F4Kd63Mc/Gemini-Generated-Image-og8yrjog8yrjog8y.png"
+alt="Fantasy">
+
+<div class="card-content">
+
+<h3>Fantasy</h3>
+
+<p>
+Magical worlds, mythical creatures and epic adventures.
+</p>
+
+</div>
+
+</div>
+
+<div class="card genre-card">
+
+<img src="https://i.ibb.co/v6tJnwRP/Gemini-Generated-Image-qnler3qnler3qnle.png"
+alt="Mystery">
+
+<div class="card-content">
+
+<h3>Mystery</h3>
+
+<p>
+Detectives, clues and secrets waiting to be solved.
+</p>
+
+</div>
+
+</div>
+
+<div class="card genre-card">
+
+<img src="https://i.ibb.co/KxTq13C1/Gemini-Generated-Image-fegkdfegkdfegkdf.png"
+alt="Comedy">
+
+<div class="card-content">
+
+<h3>Comedy</h3>
+
+<p>
+Light-hearted stories filled with humour and fun.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<section id="summaries">
+
+<h2 class="section-title">
+Book Summaries
+</h2>
+
+<div class="card">
+
+<button class="summary-btn" onclick="toggleSummary('s1')">
+Harry Potter and the Philosopher's Stone
+</button>
+
+<div id="s1" class="summary-content">
+Harry Potter discovers he is a wizard and begins his journey at Hogwarts School of Witchcraft and Wizardry, where he makes friends, uncovers secrets, and faces the dark legacy of Lord Voldemort.
+</div>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<button class="summary-btn" onclick="toggleSummary('s2')">
+The Alchemist
+</button>
+
+<div id="s2" class="summary-content">
+Santiago, a young shepherd, travels across deserts and distant lands in search of treasure, learning valuable lessons about destiny, dreams, and self-discovery.
+</div>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<button class="summary-btn" onclick="toggleSummary('s3')">
+Pride and Prejudice
+</button>
+
+<div id="s3" class="summary-content">
+Elizabeth Bennet navigates family expectations, social status, and misunderstandings while gradually discovering the true character of Mr. Darcy.
+</div>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<button class="summary-btn" onclick="toggleSummary('s4')">
+The Silent Patient
+</button>
+
+<div id="s4" class="summary-content">
+Alicia Berenson stops speaking after a shocking crime. A psychotherapist becomes obsessed with uncovering the truth behind her silence.
+</div>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<button class="summary-btn" onclick="toggleSummary('s5')">
+The Hobbit
+</button>
+
+<div id="s5" class="summary-content">
+Bilbo Baggins joins a group of dwarves on a dangerous quest to reclaim treasure guarded by the dragon Smaug, discovering courage he never knew he had.
+</div>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<button class="summary-btn" onclick="toggleSummary('s6')">
+The Adventures of Sherlock Holmes
+</button>
+
+<div id="s6" class="summary-content">
+Sherlock Holmes uses observation, logic, and deduction to solve some of London's most intriguing mysteries alongside Dr. Watson.
+</div>
+
+</div>
+
+</section>
+
+<section id="reviews">
+
+<h2 class="section-title">
+Reader Reviews
+</h2>
+
+<div class="review-grid">
+
+<div class="review-card">
+
+<h3>★★★★★</h3>
+
+<p>
+"Beautiful website with a great collection of books and genres."
+</p>
+
+</div>
+
+<div class="review-card">
+
+<h3>★★★★★</h3>
+
+<p>
+"The summaries are concise and helpful for discovering new reads."
+</p>
+
+</div>
+
+<div class="review-card">
+
+<h3>★★★★☆</h3>
+
+<p>
+"I loved the fantasy and mystery sections. Easy to navigate."
+</p>
+
+</div>
+
+<div class="review-card">
+
+<h3>★★★★★</h3>
+
+<p>
+"A modern online library experience with an attractive design."
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2 class="section-title">
+Contact Novel Nest
+</h2>
+
+<div class="contact-form">
+
+<form id="contactForm">
+
+<input
+type="text"
+placeholder="Your Name"
+required>
+
+<input
+type="email"
+placeholder="Your Email"
+required>
+
+<select required>
+
+<option value="">
+Choose Favorite Genre
+</option>
+
+<option>Romance</option>
+<option>Horror</option>
+<option>Thriller</option>
+<option>Fantasy</option>
+<option>Mystery</option>
+<option>Comedy</option>
+
+</select>
+
+<textarea
+rows="6"
+placeholder="Your Message"
+required>
+</textarea>
+
+<button type="submit">
+Send Message
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+<footer>
+
+<h3>Novel Nest</h3>
+
+<br>
+
+<p>
+Discover, Explore and Review Your Next Favorite Book
+</p>
+
+<br>
+
+<p>
+© 2026 Novel Nest. All Rights Reserved.
+</p>
+
+</footer>
+<div id="thankYouPopup" class="popup-overlay">
+
+<div class="popup-box">
+
+<h2>📚 Thank You!</h2>
+
+<p>
+Your message has been successfully sent to Novel Nest.
+We appreciate your feedback and hope you discover your next favorite book soon!
+</p>
+
+<button onclick="closePopup()">
+Close
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+function toggleSummary(id){
+
+let summary =
+document.getElementById(id);
+
+if(summary.style.display === "block"){
+summary.style.display = "none";
+}
+else{
+summary.style.display = "block";
+}
+
+}
+
+function searchBooks(){
+
+let input =
+document.getElementById("searchInput")
+.value
+.toLowerCase();
+
+let books =
+document.querySelectorAll(".searchable-book");
+
+books.forEach(function(book){
+
+let text =
+book.textContent.toLowerCase();
+
+if(text.includes(input)){
+book.style.display = "block";
+}
+else{
+book.style.display = "none";
+}
+
+});
+
+}
+
+document
+.getElementById("contactForm")
+.addEventListener("submit",function(e){
+
+e.preventDefault();
+
+document.getElementById(
+"thankYouPopup"
+).style.display="flex";
+
+this.reset();
+
+});
+document
+.getElementById("darkModeBtn")
+.addEventListener("click",function(){
+
+document.body.classList.toggle("dark-mode");
+
+});
+function closePopup(){
+
+document.getElementById(
+"thankYouPopup"
+).style.display="none";
+
+}
+</script>
+
+</body>
+</html>
